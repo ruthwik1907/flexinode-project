@@ -1,18 +1,15 @@
 {
-  "name": "flexinode-project",
+  "name": "flexinode-root",
   "version": "1.0.0",
   "private": true,
-  "engines": {
-    "node": "18.x"
-  },
-  "scripts": {
-    "start": "node backend/server.js",
-    "build": "cd frontend && npm install && npm run build"
-  },
   "dependencies": {
     "express": "^4.19.2",
     "mongoose": "^8.4.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5"
+  },
+  "scripts": {
+    "start": "node backend/server.js",
+    "build": "cd frontend && npm install && npm run build"
   }
 }
