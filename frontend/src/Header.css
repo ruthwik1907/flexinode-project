@@ -1,0 +1,338 @@
+/* --- Base Header Styles --- */
+.home-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 20px;
+  background-color: #43b9ec;
+  color: white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  position: sticky; /* Changed to sticky for better layout */
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  height: 50px;
+  width: auto;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+/* 🔗 Right Section (Nav + User Info) */
+.right-section {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-left: auto;
+}
+
+.nav-links {
+  display: flex;
+  gap: 15px;
+}
+
+.nav-btn {
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: #43b9ec;
+  transition: background 0.3s ease, transform 0.1s;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.nav-btn:hover {
+  background: #13aeec;
+}
+
+.nav-btn:active {
+    transform: scale(0.98);
+}
+
+
+/* 👤 User Info */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-name {
+  font-size: 16px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+}
+
+.avatar-container {
+  position: relative;
+}
+
+.generic-avatar {
+  width: 40px;
+  height: 40px;
+  background-color: #f3f3f3;
+  color: #333;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  border: 2px solid white;
+  transition: box-shadow 0.2s;
+}
+
+.generic-avatar:hover {
+    box-shadow: 0 0 0 3px #13aeec;
+}
+
+/* 📂 Dropdown Menu */
+.dropdown-menu {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background-color: #fff;
+  color: #333;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 160px;
+  z-index: 100;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.dropdown-row:hover {
+    background-color: #f0f0f0;
+}
+
+.dropdown-item {
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  flex-grow: 1;
+}
+
+.dropdown-item:hover {
+  color: #e53e3e;
+}
+
+.close-btn {
+  cursor: pointer;
+  font-size: 18px;
+  color: #666;
+  margin-left: 10px;
+}
+
+.close-btn:hover {
+  color: #000;
+}
+
+/* --- Modal Styles --- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal-box {
+  background: #fff;
+  padding: 30px 40px;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-box h2 {
+  margin-bottom: 10px;
+  color: #1e3a8a;
+}
+
+.password-input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.error-text {
+  color: #e53e3e;
+  font-size: 14px;
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+.modal-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.modal-btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.modal-btn.confirm {
+  background: #43b9ec;
+  color: #fff;
+}
+
+.modal-btn.confirm:hover {
+  background: #1e40af;
+}
+
+.modal-btn.cancel {
+  background: #e5e7eb;
+  color: #333;
+}
+
+.modal-btn.cancel:hover {
+  background: #d1d5db;
+}
+
+/* ✨ Fade Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* --- New Mobile/Tablet Styles --- */
+
+.menu-icon {
+  display: none; /* Hidden by default on desktop */
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.hamburger-svg {
+    width: 30px;
+    height: 30px;
+    display: block;
+}
+
+/* Tablet and Mobile (up to 768px) */
+@media (max-width: 768px) {
+  .home-header {
+    padding: 10px 15px;
+    flex-wrap: nowrap;
+  }
+
+  /* Show the hamburger icon */
+  .menu-icon {
+    display: block; 
+    order: -1; /* Place the hamburger on the far left */
+    margin-right: 15px;
+  }
+  
+  .logo-container {
+      order: -1; /* Move logo next to the menu icon */
+  }
+
+  .right-section {
+    /* Keep user info on the right */
+    gap: 10px;
+  }
+  
+  /* Hide the standard nav links */
+  .nav-links {
+    display: none; 
+    position: absolute;
+    top: 60px; /* Adjust based on header height */
+    left: 0;
+    width: 100%;
+    flex-direction: column;
+    background-color: #43b9ec; /* Slightly different shade for contrast */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 0;
+    z-index: 999;
+  }
+
+  /* Show the nav links when the menu is open */
+  .nav-links.open {
+    display: flex;
+  }
+
+  .nav-btn {
+    width: 100%;
+    text-align: left;
+    padding: 12px 20px;
+    border-radius: 0;
+    background: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .nav-btn:last-child {
+      border-bottom: none;
+  }
+
+  .user-name {
+    display: none; /* Hide name on small mobile for space */
+  }
+  
+  /* Ensure the user info section is always visible and on the right */
+  .user-info {
+     margin-left: auto;
+     order: 1;
+  }
+}
+
+/* Desktop/Large Tablet overrides to hide the hamburger */
+/* Desktop/Laptop adjustment: move right-section slightly to the right */
+@media (min-width: 1025px) {
+  .right-section {
+    margin-right: 30px; /* Adjust this value as needed */
+  }
+}

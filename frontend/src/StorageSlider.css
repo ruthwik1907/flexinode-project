@@ -1,0 +1,278 @@
+body {
+  font-family: "Inter", sans-serif;
+  background-color: #eef1f4;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* 🔹 Container */
+.payment-dialog-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 30px;
+  max-width: 800px;
+  width: 90%;
+  margin: 50px auto;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  padding: 40px;
+  transition: all 0.3s ease-in-out;
+}
+
+/* 🔹 Sections */
+.slider-section,
+.payment-section {
+  width: 100%;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.slider-section {
+  background: #f8f9fa;
+}
+
+/* 🔹 Section Titles */
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* 🔹 Slider */
+.slider-content {
+  margin-bottom: 20px;
+}
+
+.styled-slider {
+  width: 100%;
+  -webkit-appearance: none;
+  background: #d3d3d3;
+  outline: none;
+  height: 8px;
+  border-radius: 5px;
+  transition: opacity 0.2s;
+  cursor: pointer;
+}
+
+.styled-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #007bff;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+/* 🔹 Slider Details */
+.details-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #555;
+}
+
+/* 🔹 UPI Input */
+.upi-input-container {
+  margin-top: 25px;
+  width: 100%;
+}
+
+.label {
+  text-align: left;
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.upi-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  color: #333;
+  transition: border-color 0.3s;
+  box-sizing: border-box;
+}
+
+.upi-input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+/* 🔹 Payment Section */
+.payment-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* 🔹 QR Code Container */
+.qr-code-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #f8f9fa;
+  padding: 25px;
+  border-radius: 12px;
+  transition: all 0.5s ease-in-out;
+  width: 100%;
+  max-width: 280px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.qr-code-container p {
+  font-size: 0.95rem;
+  color: #555;
+  margin: 0 0 15px 0;
+}
+
+.qr-code-box {
+  padding: 10px;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.upi-info {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.upi-info p {
+  margin: 5px 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+/* 🔹 Pay Button */
+.pay-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.1s;
+  width: 100%;
+  max-width: 250px;
+  margin-top: 15px;
+}
+
+.pay-btn:hover {
+  background-color: #0056b3;
+  transform: scale(1.02);
+}
+
+.pay-btn:disabled {
+  background-color: #b0c4de;
+  cursor: not-allowed;
+}
+
+.pay-button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  text-align: center;
+}
+
+.pay-button-container p {
+  font-size: 0.95rem;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+/* 🔹 Mobile & Tablet Responsive Styling */
+@media (max-width: 768px) {
+  .payment-dialog-container {
+    margin: 20px auto;
+    padding: 25px;
+    gap: 25px;
+    width: 95%;
+    max-width: 400px;
+  }
+
+  .slider-section,
+  .payment-section {
+    width: 100%;
+    padding: 15px;
+  }
+
+  .qr-code-container {
+    max-width: 260px;
+    padding: 20px;
+  }
+
+  .details-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .upi-input-container {
+    width: 100%;
+  }
+
+  .pay-btn {
+    width: 100%;
+    max-width: 260px;
+    padding: 12px 20px;
+    font-size: 1rem;
+  }
+
+  .section-title {
+    font-size: 1.3rem;
+  }
+}
+
+/* 🔹 Extra Small Devices (Phones < 480px) */
+@media (max-width: 480px) {
+  .payment-dialog-container {
+    padding: 15px;
+    margin: 10px;
+    width: 90%;
+    gap: 20px;
+  }
+
+  .qr-code-container {
+    max-width: 220px;
+    padding: 15px;
+  }
+
+  .pay-btn {
+    padding: 10px 18px;
+    font-size: 0.95rem;
+  }
+
+  .section-title {
+    font-size: 1.2rem;
+  }
+
+  .details-row p {
+    font-size: 0.9rem;
+  }
+
+  .upi-input {
+    font-size: 0.9rem;
+    padding: 10px;
+  }
+}

@@ -1,0 +1,297 @@
+/* ---------------------- General Styles ---------------------- */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+.home-container {
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  padding-top: 80px; /* space for fixed header */
+}
+
+.home-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------------------- Hero Section ---------------------- */
+.hero-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  margin: 40px 0;
+  padding: 0 40px;
+}
+
+.hero-image {
+  width: 50%;
+  max-width: 700px;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.hero-text {
+  width: 45%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.hero-text h3 {
+  font-size: 28px;
+  color: #1f2937;
+  margin-bottom: 15px;
+}
+
+.hero-text p {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #374151;
+}
+
+/* ---------------------- Tales of Data / Database Section ---------------------- */
+.database-section {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto 60px;
+  padding: 50px 40px;
+  background: linear-gradient(135deg, #ffffff, #f8faff);
+  border-radius: 20px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+}
+
+.database-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
+}
+
+.database-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  padding: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.database-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+}
+
+.card-img {
+  width: 100%;
+  max-width: 500px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 14px;
+  margin-bottom: 15px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.database-card:hover .card-img {
+  transform: scale(1.05);
+}
+
+.card-text {
+  text-align: center;
+}
+
+.card-text strong {
+  font-size: 20px;
+  color: #111827;
+  margin-bottom: 8px;
+  font-weight: 600;
+  display: block;
+}
+
+.card-text p {
+  font-size: 16px;
+  color: #374151;
+  line-height: 1.6;
+}
+
+/* ---------------------- Services Section ---------------------- */
+.services-section {
+  width: 90%;
+  max-width: 1200px;
+  margin: 60px auto;
+  text-align: center;
+}
+
+.services-section h2 {
+  font-size: 28px;
+  margin-bottom: 30px;
+  color: #1f2937;
+  font-weight: 700;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* default single column on mobile */
+  gap: 30px;
+}
+
+/* First image full-width */
+.service-card.full-width {
+  grid-column: 1 / -1;
+}
+
+.service-card img {
+  width: 100%;
+  height: 250px; /* desktop height */
+  border-radius: 12px;
+  object-fit: cover;
+  margin-bottom: 15px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.service-card img:hover {
+  transform: scale(1.03);
+}
+
+.service-text {
+  text-align: center;
+}
+
+.service-text strong {
+  display: block;
+  font-size: 20px;
+  color: #111827;
+  margin-bottom: 8px;
+}
+
+.service-text p {
+  font-size: 16px;
+  color: #374151;
+  line-height: 1.5;
+}
+
+/* Half-row for two images side by side on desktop */
+.half-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+/* ---------------------- Storage Section ---------------------- */
+section[ref] {
+  width: 90%;
+  max-width: 800px;
+  margin: 50px auto;
+}
+
+/* ---------------------- Responsive Adjustments ---------------------- */
+@media (max-width: 1024px) {
+  .hero-section {
+    flex-direction: column;
+    align-items: center;
+    padding: 0 20px;
+  }
+
+  .hero-image,
+  .hero-text {
+    width: 100%;
+  }
+
+  .hero-text h3 {
+    font-size: 24px;
+    text-align: center;
+  }
+
+  .hero-text p {
+    font-size: 16px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Tales of Data stack vertically */
+  .database-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  /* Services Section - stack */
+  .half-row {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .service-card img {
+    height: 200px; /* reduce height on mobile */
+  }
+
+  .service-text strong {
+    font-size: 18px;
+  }
+
+  .service-text p {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .database-section,
+  .services-section {
+    padding: 20px;
+  }
+
+  .hero-section {
+    margin: 20px 0;
+    padding: 0 10px;
+  }
+
+  .service-card img,
+  .card-img {
+    height: 180px;
+  }
+
+  .service-text strong,
+  .card-text strong {
+    font-size: 16px;
+  }
+
+  .service-text p,
+  .card-text p {
+    font-size: 13px;
+  }
+}
+/* Scrollbar styling for all browsers */
+
+/* Chrome, Safari, Edge */
+::-webkit-scrollbar {
+  width: 10px; /* width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: #f0f0f0; /* track background */
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #43b9ec; /* scrollbar thumb color */
+  border-radius: 5px;
+  border: 2px solid #f0f0f0; /* optional padding around thumb */
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin; /* thin scrollbar */
+  scrollbar-color: #43b9ec #f0f0f0; /* thumb | track */
+}
