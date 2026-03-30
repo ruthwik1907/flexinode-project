@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
-import { API_BASE } from "./api";
+import { API_BASE } from "./services";
 import "./StorageSlider.css";
 
 const StorageSlider = ({ uid, user }) => {
