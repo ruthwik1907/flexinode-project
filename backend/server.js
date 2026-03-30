@@ -181,7 +181,7 @@ app.get("/api/payments", async (req, res) => {
 });
 
 // admin login route
-app.post("/api/admin-login", (req, res) => {
+app.post("/admin-login", (req, res) => {
   const { password } = req.body;
 
   if (!process.env.ADMIN_PASSWORD) {
