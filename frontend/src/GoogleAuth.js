@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { auth, googleProvider } from "./firebase";
 import { useNavigate } from "react-router-dom";
-import { API_BASE } from "./services";
+import { API_BASE } from "./api";
 import "./GoogleAuth.css";
 
 

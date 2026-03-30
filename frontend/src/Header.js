@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { auth } from "./firebase";
 import { Link, useNavigate } from "react-router-dom";
-import { buildApiUrl } from "./services";
+import { buildApiUrl } from "./api";
 import logo from "./assets/fnlogo.jpg";
 import "./Header.css";
 
