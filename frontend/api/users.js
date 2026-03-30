@@ -1,16 +1,20 @@
+// frontend/api/users.js
+
 import mongoose from "mongoose";
 
 let isConnected = false;
 
-const connectDB = async () => {
+async function connectDB() {
   if (isConnected) return;
 
-  await mongoose.connect(process.env.MONGO_URI, {
-    dbName: "databaseManagement",
-  });
+  if (!process.env.MONGO_URI) {
+    throw new Error("MONGO_URI NOT FOUND");
+  }
+
+  await mongoose.connect(process.env.MONGO_URI);
 
   isConnected = true;
-};
+}
 
 const userSchema = new mongoose.Schema({
   uid: String,
@@ -22,16 +26,20 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.models.User || mongoose.model("User", userSchema);
 
 export default async function handler(req, res) {
-  await connectDB();
+  try {
+    await connectDB();
 
-  if (req.method === "GET") {
-    try {
+    if (req.method === "GET") {
       const users = await User.find().sort({ _id: -1 });
       return res.status(200).json(users);
-    } catch (err) {
-      return res.status(500).json({ error: err.message });
     }
-  }
 
-  return res.status(405).json({ error: "Method not allowed" });
+    return res.status(405).json({ error: "Method not allowed" });
+
+  } catch (err) {
+    console.error("ERROR:", err);
+    return res.status(500).json({
+      error: err.message || "Server crashed",
+    });
+  }
 }
