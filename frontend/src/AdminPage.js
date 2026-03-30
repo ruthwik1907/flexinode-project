@@ -17,7 +17,7 @@ const AdminPage = () => {
         const data = await res.json().catch(() => []);
 
         if (!res.ok) {
-          throw new Error(data.error || "Failed to fetch users");
+          throw new Error(data.error || "Failed to fetch users....");
         }
 
         setUsers(Array.isArray(data) ? data : []);
