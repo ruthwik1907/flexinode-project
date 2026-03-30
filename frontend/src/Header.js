@@ -51,7 +51,7 @@ const Header = ({ user }) => {
     }
 
     try {
-      const res = await fetch(buildApiUrl("/api/admin/login"), {
+      const res = await fetch(buildApiUrl("/admin/login"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password }),

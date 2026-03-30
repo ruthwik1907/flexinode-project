@@ -26,7 +26,7 @@ const GoogleAuth = () => {
 
   useEffect(() => {
     if (user) {
-      fetch(`${API_BASE}/api/users`, {
+      fetch(`${API_BASE}/users`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

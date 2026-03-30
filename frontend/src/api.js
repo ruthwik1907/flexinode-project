@@ -1,12 +1,16 @@
-const configuredApiUrl = (process.env.REACT_APP_API_URL || "").trim().replace(/\/$/, "");
+const configuredApiUrl = (process.env.REACT_APP_API_URL || "")
+  .trim()
+  .replace(/\/$/, "");
 
-const productionFallbackApi = "https://flexinode.onrender.com";
+const productionFallbackApi = "/api";
 
 const isLocalhost =
   typeof window !== "undefined" &&
   ["localhost", "127.0.0.1"].includes(window.location.hostname);
 
-export const API_BASE = configuredApiUrl || (isLocalhost ? "http://localhost:5000" : productionFallbackApi);
+export const API_BASE =
+  configuredApiUrl ||
+  (isLocalhost ? "http://localhost:5000" : productionFallbackApi);
 
 export const buildApiUrl = (path = "") => {
   const normalizedPath = path.startsWith("/") ? path : `/${path}`;

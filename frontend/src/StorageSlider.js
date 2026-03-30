@@ -34,7 +34,7 @@ const StorageSlider = ({ uid, user }) => {
       const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
       // 1️⃣ Call backend to save payment
-      const response = await fetch(`${API_BASE}/api/payments`, {
+      const response = await fetch(`${API_BASE}/payments`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

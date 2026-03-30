@@ -13,7 +13,7 @@ const AdminPage = () => {
     const fetchUsers = async () => {
       try {
         setError("");
-        const res = await fetch(buildApiUrl("/api/users"));
+        const res = await fetch(buildApiUrl("/users"));
         const data = await res.json().catch(() => []);
 
         if (!res.ok) {
