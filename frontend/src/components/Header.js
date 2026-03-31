@@ -33,7 +33,6 @@ const Header = ({ user }) => {
   }, [isNavOpen]);
 
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
-  const closeDropdown = () => setDropdownOpen(false);
   const toggleNav = () => setIsNavOpen(!isNavOpen);
 
   const signOut = async () => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { buildApiUrl } from "../utils/services";
 import "./AdminPage.css";
@@ -24,7 +24,7 @@ const AdminPage = ({ user }) => {
     };
   };
 
-  const fetchDashboardData = async () => {
+  const fetchDashboardData = useCallback(async () => {
     setLoading(true);
     setError("");
     try {
@@ -54,11 +54,11 @@ const AdminPage = ({ user }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchDashboardData();
-  }, []);
+  }, [fetchDashboardData]);
 
   const handlePaymentStatusUpdate = async (paymentId, newStatus) => {
     try {
