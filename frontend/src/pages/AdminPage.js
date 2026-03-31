@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { buildApiUrl } from "./services";
+import { buildApiUrl } from "../utils/services";
 import "./AdminPage.css";
 
 const AdminPage = ({ user }) => {

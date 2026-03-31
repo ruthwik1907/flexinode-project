@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { auth, googleProvider } from "./firebase";
+import { auth, googleProvider } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
-import { API_BASE } from "./services";
-import logo from "./assets/fnlogo.jpg";
+import { API_BASE } from "../utils/services";
+import logo from "../assets/fnlogo.jpg";
 import "./GoogleAuth.css";
 
 const GoogleAuth = () => {

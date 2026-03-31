@@ -6,12 +6,12 @@ import {
   Navigate,
   useLocation,
 } from "react-router-dom";
-import { auth } from "./firebase";
-import GoogleAuth from "./GoogleAuth";
-import Home from "./Home";
-import AdminPage from "./AdminPage";
-import ContactPage from "./ContactPage";
-import Header from "./Header";
+import { auth } from "./utils/firebase";
+import GoogleAuth from "./pages/GoogleAuth";
+import Home from "./pages/Home";
+import AdminPage from "./pages/AdminPage";
+import ContactPage from "./pages/ContactPage";
+import Header from "./components/Header";
 
 const AdminRoute = ({ user, children }) => {
   const hasAdminAccess =

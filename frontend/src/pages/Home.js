@@ -1,11 +1,11 @@
 import React, { useRef } from "react";
 import "./Home.css";
-import StorageSlider from "./StorageSlider";
-import HomePage from "./assets/HomePage.jpg";
-import DataRestore from "./assets/DataRestore.jpg";
-import DataStore from "./assets/DataStore.jpg";
-import DataCenter from "./assets/DataCenter.jpg";
-import DataDisaster from "./assets/DataDisaster.jpg";
+import StorageSlider from "../components/StorageSlider";
+import HomePage from "../assets/HomePage.jpg";
+import DataRestore from "../assets/DataRestore.jpg";
+import DataStore from "../assets/DataStore.jpg";
+import DataCenter from "../assets/DataCenter.jpg";
+import DataDisaster from "../assets/DataDisaster.jpg";
 
 const Home = ({ user }) => {
   const storageRef = useRef(null);
