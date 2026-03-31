@@ -17,8 +17,8 @@ const StorageSlider = ({ uid, user }) => {
   const totalGB = value * gbPerStep;
   const totalPrice = totalGB * pricePerGB;
 
-  const upiId = "vrraju27@ybl";
-  const payeeName = "V Ranjith Raju";
+  const upiId = "sairushidharkonireddy@ybl";
+  const payeeName = "Kone ReddySreenivasaSai Rushidhar";
   const upiUrl = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(
     payeeName
   )}&am=${totalPrice}&cu=INR`;
