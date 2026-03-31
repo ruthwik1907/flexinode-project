@@ -8,20 +8,19 @@ dotenv.config();
 const app = express();
 
 const allowedOrigins = [
-  process.env.FRONTEND_URL, // Ensure this is "https://flexinode-project.vercel.app"
-  process.env.GODADDY_URL,  // Ensure this is "https://www.flexinode.in"
+  process.env.FRONTEND_URL,
+  process.env.GODADDY_URL,
   "https://flexinode.in",
-  "http://localhost:3000",
-  "http://127.0.0.1:3000",
-].filter(Boolean);
+  "http://localhost:3000"
+].filter(Boolean).map(url => url.replace(/\/$/, "")); // Removes trailing slashes
 
 // Database Connection Helper
 const connectDB = async () => {
-  if (mongoose.connection.readyState >= 1) return;
+  if (mongoose.connection.readyState >= 1) return; // Already connected or connecting
   
-  console.log("📡 Connecting to MongoDB...");
   return mongoose.connect(process.env.MONGO_URI, {
-    dbName: process.env.DB_NAME || "databaseManagement",
+    dbName: "databaseManagement",
+    serverSelectionTimeoutMS: 5000, // Timeout after 5 seconds instead of hanging
   });
 };
 
@@ -42,15 +41,12 @@ app.use(
 
 // Middleware to ensure DB is connected before any API call
 app.use(async (req, res, next) => {
-  if (req.path.startsWith('/api')) {
-    try {
-      await connectDB();
-      next();
-    } catch (err) {
-      res.status(500).json({ error: "Database connection failed" });
-    }
-  } else {
+  try {
+    await connectDB();
     next();
+  } catch (err) {
+    console.error("DB Connection Error:", err.message);
+    res.status(500).json({ error: "Database connection failed" });
   }
 });
 
@@ -86,7 +82,7 @@ const userSchema = new mongoose.Schema({
   storageGB: { type: Number, default: 0 },
 });
 
-const User = mongoose.model("User", userSchema);
+const User = mongoose.models.User || mongoose.model("User", userSchema);
 
 /* ============================
    PAYMENT SCHEMA
@@ -100,7 +96,7 @@ const paymentSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-const Payment = mongoose.model("Payment", paymentSchema);
+const Payment = mongoose.models.Payment || mongoose.model("Payment", paymentSchema);
 
 /* ============================
    USER ROUTES
