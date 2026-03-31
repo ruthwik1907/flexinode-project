@@ -8,30 +8,51 @@ dotenv.config();
 const app = express();
 
 const allowedOrigins = [
-  process.env.FRONTEND_URL,
-  process.env.NETLIFY_URL,
-  process.env.GODADDY_URL,
+  process.env.FRONTEND_URL, // Ensure this is "https://flexinode-project.vercel.app"
+  process.env.GODADDY_URL,  // Ensure this is "https://www.flexinode.in"
+  "https://flexinode.in",
   "http://localhost:3000",
   "http://127.0.0.1:3000",
 ].filter(Boolean);
 
+// Database Connection Helper
+const connectDB = async () => {
+  if (mongoose.connection.readyState >= 1) return;
+  
+  console.log("📡 Connecting to MongoDB...");
+  return mongoose.connect(process.env.MONGO_URI, {
+    dbName: process.env.DB_NAME || "databaseManagement",
+  });
+};
+
 app.use(
   cors({
     origin(origin, callback) {
-      // 1. Allow requests with no origin (like mobile apps, curl, or desktop Postman)
-      // 2. Allow if the origin is in our whitelist
-      // 3. NEW: Allow common development tools/extensions during dev
+      // Allow if no origin (Postman) or if in whitelist
       if (!origin || allowedOrigins.includes(origin) || origin.startsWith('chrome-extension://')) {
         return callback(null, true);
       }
-
+      console.log("🚫 CORS Rejected:", origin);
       return callback(new Error(`CORS blocked for origin: ${origin}`));
     },
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
-app.use(express.json());
+
+// Middleware to ensure DB is connected before any API call
+app.use(async (req, res, next) => {
+  if (req.path.startsWith('/api')) {
+    try {
+      await connectDB();
+      next();
+    } catch (err) {
+      res.status(500).json({ error: "Database connection failed" });
+    }
+  } else {
+    next();
+  }
+});
 
 const PORT = process.env.PORT || 5000;
 const REQUIRED_ENV_VARS = ["MONGO_URI", "ADMIN_PASSWORD"];
