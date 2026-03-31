@@ -7,7 +7,7 @@ import "./Header.css";
 
 const Header = ({ user }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [isNavOpen, setIsNavOpen] = useState(false); // State for mobile navigation
+  const [isNavOpen, setIsNavOpen] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -26,12 +26,12 @@ const Header = ({ user }) => {
 
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
   const closeDropdown = () => setDropdownOpen(false);
-  const toggleNav = () => setIsNavOpen(!isNavOpen); // Toggle function for hamburger menu
+  const toggleNav = () => setIsNavOpen(!isNavOpen);
 
   const signOut = async () => {
     try {
       await auth.signOut();
-      navigate("/"); // or navigate("/auth");
+      navigate("/");
     } catch (err) {
       console.error(err);
     }
@@ -41,17 +41,17 @@ const Header = ({ user }) => {
     setShowPasswordModal(true);
     setPassword("");
     setError("");
-    setIsNavOpen(false); // Close mobile nav when opening modal
+    setIsNavOpen(false);
   };
 
-const handlePasswordSubmit = async () => {
+  const handlePasswordSubmit = async () => {
     if (!password) {
       setError("Password is required");
       return;
     }
 
     try {
-      // Ensure buildApiUrl is pointing to your Vercel URL /api
+      // Corrected to use the standard buildApiUrl helper
       const res = await fetch(buildApiUrl("/admin-login"), {
         method: "POST",
         headers: { 
@@ -70,44 +70,12 @@ const handlePasswordSubmit = async () => {
         setError("");
         navigate("/admin");
       } else {
-        // This will now show the actual error from your server (like "Database connection failed")
         setError(`❌ ${data.error || "Incorrect password!"}`);
       }
     } catch (err) {
       console.error(err);
       setError(
-        "⚠️ Unable to reach the server. Please check your internet connection or Vercel deployment status."
-      );
-    }
-  };
-
-    try {
-      // Ensure buildApiUrl is pointing to your Vercel URL /api
-      const res = await fetch(buildApiUrl("/admin-login"), {
-        method: "POST",
-        headers: { 
-          "Content-Type": "application/json",
-          "Accept": "application/json" 
-        },
-        body: JSON.stringify({ password }),
-      });
-
-      const data = await res.json().catch(() => ({}));
-
-      if (res.ok) {
-        localStorage.setItem("flexinode_admin_access", "granted");
-        setShowPasswordModal(false);
-        setPassword("");
-        setError("");
-        navigate("/admin");
-      } else {
-        // This will now show the actual error from your server (like "Database connection failed")
-        setError(`❌ ${data.error || "Incorrect password!"}`);
-      }
-    } catch (err) {
-      console.error(err);
-      setError(
-        "⚠️ Unable to reach the server. Please check your internet connection or Vercel deployment status."
+        "⚠️ Unable to reach the server. Please check your connection or Vercel deployment status."
       );
     }
   };
@@ -118,46 +86,34 @@ const handlePasswordSubmit = async () => {
     
     const names = name.split(" ");
     if (names.length > 1) {
-      // Get first letter of first name and last name
       return (names[0]?.[0] || "").toUpperCase() + (names[names.length - 1]?.[0] || "").toUpperCase();
     }
-    // Just get the first initial for single name or email
     return (name[0] || "").toUpperCase();
   };
 
   return (
     <>
       <header className="home-header">
-        {/* Left: Logo */}
         <div className="logo-container">
           <Link to="/">
             <img src={logo} alt="App Logo" className="logo" />
           </Link>
         </div>
 
-        {/* Right Section: Navigation Links + Menu Icon + User Info */}
         <div className="right-section">
-          {/* Nav Links - Conditional class for mobile menu (Desktop is hidden, Mobile opens as dropdown) */}
           <nav className={`nav-links ${isNavOpen ? 'open' : ''}`}>
-            {/* Home button */}
             <Link to="/" className="nav-btn" onClick={() => setIsNavOpen(false)}>
               Home
             </Link>
-
-            {/* Admin button */}
             <button onClick={handleAdminTap} className="nav-btn">
               Admin
             </button>
-
-            {/* Contact Us button */}
             <Link to="/contact" className="nav-btn" onClick={() => setIsNavOpen(false)}>
               Contact Us
             </Link>
           </nav>
 
-          {/* NEW POSITION: Hamburger (Mobile) is now on the right, inside right-section, before the user-info */}
           <button className="menu-icon" onClick={toggleNav} aria-label="Toggle navigation menu">
-            {/* Hamburger Icon (SVG) */}
             <svg className="hamburger-svg" viewBox="0 0 100 80" width="40" height="40" fill="currentColor">
               <rect width="100" height="15" rx="8"></rect>
               <rect y="30" width="100" height="15" rx="8"></rect>
@@ -189,7 +145,6 @@ const handlePasswordSubmit = async () => {
         </div>
       </header>
 
-      {/* Password Modal */}
       {showPasswordModal && (
         <div className="modal-overlay">
           <div className="modal-box">
