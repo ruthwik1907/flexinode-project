@@ -11,7 +11,7 @@ const StorageSlider = ({ uid, user }) => {
   const [paymentStatus, setPaymentStatus] = useState("");
   const [isMarkingPaid, setIsMarkingPaid] = useState(false);
 
-  const pricePerGB = 1;
+  const pricePerGB = 1000;
   const gbPerStep = 1;
 
   const totalGB = value * gbPerStep;

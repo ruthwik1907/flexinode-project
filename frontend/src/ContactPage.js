@@ -24,31 +24,19 @@ const ContactPage = () => {
         </p>
 
         <p className="phone">
-          📞 <a href="tel:9347011036">+91 9347011036</a>
+          📞 <a href="tel:8886347428">+91 8886347428</a>
         </p>
 
         <p className="email">
           📧{" "}
           <a
-            href="https://mail.google.com/mail/?view=cm&fs=1&to=ranjithraju2709@gmail.com"
+            href="https://mail.google.com/mail/?view=cm&fs=1&to=flexinode@gmail.com"
             target="_blank"
             rel="noopener noreferrer"
           >
-            ranjithraju2709@gmail.com
+            flexinode@gmail.com
           </a>
         </p>
-
-        {/* ✅ WhatsApp contact */}
-        <div className="whatsapp">
-          <FaWhatsapp className="whatsapp-icon" />
-          <a
-            href="https://wa.me/919347011036"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Chat on WhatsApp
-          </a>
-        </div>
 
         <h2>Availability</h2>
         <p>
