@@ -120,6 +120,58 @@ app.get("/api/users", async (req, res) => {
   }
 });
 
+// Create payment
+app.post("/api/payments", async (req, res) => {
+  const { userId, gb, totalPrice, upiLink } = req.body;
+
+  if (!userId || !gb || !totalPrice || !upiLink) {
+    return res.status(400).json({ error: "userId, gb, totalPrice and upiLink are required" });
+  }
+
+  try {
+    const payment = new Payment({
+      userId,
+      gb,
+      totalPrice,
+      upiLink,
+      status: "PENDING",
+    });
+
+    await payment.save();
+    return res.status(201).json({ message: "Payment created", payment });
+  } catch (err) {
+    console.error("Create payment error:", err);
+    return res.status(500).json({ error: err.message || "Failed to create payment" });
+  }
+});
+
+// Update payment status
+app.put("/api/payments/:id", async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  if (!status) {
+    return res.status(400).json({ error: "status is required" });
+  }
+
+  try {
+    const payment = await Payment.findByIdAndUpdate(
+      id,
+      { status },
+      { new: true, runValidators: true }
+    );
+
+    if (!payment) {
+      return res.status(404).json({ error: "Payment not found" });
+    }
+
+    return res.json(payment);
+  } catch (err) {
+    console.error("Update payment error:", err);
+    return res.status(500).json({ error: err.message || "Failed to update payment" });
+  }
+});
+
 // Health Check
 app.get("/api/health", (req, res) => {
   res.json({
