@@ -44,16 +44,20 @@ const Header = ({ user }) => {
     setIsNavOpen(false); // Close mobile nav when opening modal
   };
 
-  const handlePasswordSubmit = async () => {
+const handlePasswordSubmit = async () => {
     if (!password) {
       setError("Password is required");
       return;
     }
 
     try {
+      // Ensure buildApiUrl is pointing to your Vercel URL /api
       const res = await fetch(buildApiUrl("/admin-login"), {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Accept": "application/json" 
+        },
         body: JSON.stringify({ password }),
       });
 
@@ -66,12 +70,44 @@ const Header = ({ user }) => {
         setError("");
         navigate("/admin");
       } else {
+        // This will now show the actual error from your server (like "Database connection failed")
         setError(`❌ ${data.error || "Incorrect password!"}`);
       }
     } catch (err) {
       console.error(err);
       setError(
-        "⚠️ Unable to reach the server. Check Render backend status and allowed frontend domain settings."
+        "⚠️ Unable to reach the server. Please check your internet connection or Vercel deployment status."
+      );
+    }
+  };
+
+    try {
+      // Ensure buildApiUrl is pointing to your Vercel URL /api
+      const res = await fetch(buildApiUrl("/admin-login"), {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "Accept": "application/json" 
+        },
+        body: JSON.stringify({ password }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (res.ok) {
+        localStorage.setItem("flexinode_admin_access", "granted");
+        setShowPasswordModal(false);
+        setPassword("");
+        setError("");
+        navigate("/admin");
+      } else {
+        // This will now show the actual error from your server (like "Database connection failed")
+        setError(`❌ ${data.error || "Incorrect password!"}`);
+      }
+    } catch (err) {
+      console.error(err);
+      setError(
+        "⚠️ Unable to reach the server. Please check your internet connection or Vercel deployment status."
       );
     }
   };
