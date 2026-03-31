@@ -16,123 +16,134 @@ const Home = ({ user }) => {
   };
 
   return (
-    <div className="home-container">
+    <div className="home-container animate-fade-in">
       {/* Hero Section */}
       <section className="hero-section">
-        <img src={HomePage} alt="Data Recovery Hero" className="hero-image" />
-        <div className="hero-text">
-          <h3>FLEXINODE Expert Data Recovery Services</h3>
-          <p>
-            We provide industry-leading solutions for secure data recovery,
-            backup, and disaster management to keep your business running
-            without interruption.
+        <div className="hero-background" style={{ backgroundImage: `url(${HomePage})` }}>
+          <div className="hero-overlay"></div>
+        </div>
+        <div className="hero-content">
+          <div className="hero-badge">Enterprise Grade</div>
+          <h1 className="hero-title">
+            Expert Data <span className="highlight-text">Recovery</span> Services
+          </h1>
+          <p className="hero-subtitle">
+            Industry-leading solutions for secure data recovery, backup, and disaster management. Keep your business running without interruption.
           </p>
+          <div className="hero-actions">
+            <button className="btn-primary hero-btn" onClick={scrollToStorage}>Explore Storage Plans</button>
+          </div>
         </div>
       </section>
 
-      <h1>
-        <center>TALES OF DATA</center>
-      </h1>
-
-      <main className="home-content">
-        <section className="database-section">
-          <div className="database-grid">
-            {/* Database cards */}
-            <div className="database-card">
-              <img
-                src={DataCenter}
-                alt="Database Service 1"
-                className="card-img"
-              />
-              <div className="card-text">
-                <strong>Data Center</strong>
-                <p>The Core Infrastructure Powering Digital Operations...</p>
+      {/* Main Content Areas */}
+      <main className="main-content">
+        
+        {/* Core Services Grid */}
+        <section className="features-section">
+          <div className="section-header">
+            <h2 className="section-title">TALES OF DATA</h2>
+            <div className="section-divider"></div>
+          </div>
+          
+          <div className="features-grid">
+            <div className="feature-card glass-panel group">
+              <div className="card-image-wrapper">
+                <img src={DataCenter} alt="Data Center" className="card-image" />
+              </div>
+              <div className="card-content">
+                <h3>Data Center</h3>
+                <p>The core infrastructure powering your digital operations with absolute reliability.</p>
               </div>
             </div>
-            <div className="database-card">
-              <img
-                src={DataStore}
-                alt="Database Service 2"
-                className="card-img"
-              />
-              <div className="card-text">
-                <strong>Data Store</strong>
-                <p>
-                  Reliable, and quick access to data for modern applications.
-                </p>
+            
+            <div className="feature-card glass-panel group">
+              <div className="card-image-wrapper">
+                <img src={DataStore} alt="Data Store" className="card-image" />
+              </div>
+              <div className="card-content">
+                <h3>Data Store</h3>
+                <p>Reliable, scalable, and instant access to your mission-critical data.</p>
               </div>
             </div>
-            <div className="database-card">
-              <img
-                src={DataRestore}
-                alt="Database Service 3"
-                className="card-img"
-              />
-              <div className="card-text">
-                <strong>Data Restore</strong>
-                <p>Protecting the digital resources businesses rely on.</p>
+            
+            <div className="feature-card glass-panel group">
+              <div className="card-image-wrapper">
+                <img src={DataRestore} alt="Data Restore" className="card-image" />
+              </div>
+              <div className="card-content">
+                <h3>Data Restore</h3>
+                <p>Advanced recovery mechanisms protecting the resources you rely on.</p>
               </div>
             </div>
-            <div className="database-card">
-              <img
-                src={DataDisaster}
-                alt="Database Service 4"
-                className="card-img"
-              />
-              <div className="card-text">
-                <strong>Data Disaster Recovery</strong>
-                <p>Ensures business continuity during unexpected failures.</p>
+            
+            <div className="feature-card glass-panel group">
+              <div className="card-image-wrapper">
+                <img src={DataDisaster} alt="Disaster Recovery" className="card-image" />
+              </div>
+              <div className="card-content">
+                <h3>Disaster Recovery</h3>
+                <p>Ensures 99.99% business continuity during unexpected failures.</p>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="services-section">
-          <h2>OUR SERVICES</h2>
+        {/* Specialized Services Area */}
+        <section className="premium-services-section">
+          <div className="section-header">
+            <h2 className="section-title">PREMIUM SERVICES</h2>
+            <div className="section-divider"></div>
+          </div>
 
-          <div className="services-grid">
-            {/* Full-width horizontal image */}
-            <div className="service-card full-width" onClick={scrollToStorage}>
-              <img src={DataRestore} alt="Service 1" />
-              <div className="service-text">
-                <strong>Data Storage</strong>
-                <p>₹6,000.00</p>
-                <strong>Shop Now →</strong>
+          <div className="services-showcase">
+            {/* Main Service */}
+            <div className="showcase-main glass-panel" onClick={scrollToStorage}>
+              <div className="showcase-bg" style={{ backgroundImage: `url(${DataRestore})` }}></div>
+              <div className="showcase-overlay"></div>
+              <div className="showcase-info">
+                <div className="showcase-badge">Popular</div>
+                <h3>Enterprise Data Storage</h3>
+                <p className="price">Starting at ₹6,000.00</p>
+                <div className="action-link">Select Plan <span className="arrow">→</span></div>
               </div>
             </div>
 
-            {/* Two half-width images side by side */}
-            <div className="half-row">
-              <div
-                className="service-card half-width"
-                onClick={scrollToStorage}
-              >
-                <img src={DataStore} alt="Service 2" />
-                <div className="service-text">
-                  <strong>Data Restore</strong>
-                  <p> ₹10,000.00</p>
-                  <strong>Shop Now →</strong>
+            {/* Sub Services */}
+            <div className="showcase-grid">
+              <div className="showcase-item glass-panel" onClick={scrollToStorage}>
+                <div className="showcase-bg" style={{ backgroundImage: `url(${DataStore})` }}></div>
+                <div className="showcase-overlay"></div>
+                <div className="showcase-info">
+                  <h3>Advanced Data Restore</h3>
+                  <p className="price">₹10,000.00</p>
+                  <div className="action-link">Learn More <span className="arrow">→</span></div>
                 </div>
               </div>
 
-              <div
-                className="service-card half-width"
-                onClick={scrollToStorage}
-              >
-                <img src={DataCenter} alt="Service 3" />
-                <div className="service-text">
-                  <strong>Data disaster recovery</strong>
-                  <p> ₹85.00</p>
-                  <strong>Shop Now →</strong>
+              <div className="showcase-item glass-panel" onClick={scrollToStorage}>
+                <div className="showcase-bg" style={{ backgroundImage: `url(${DataCenter})` }}></div>
+                <div className="showcase-overlay"></div>
+                <div className="showcase-info">
+                  <h3>Disaster Recovery Audit</h3>
+                  <p className="price">₹85.00 / node</p>
+                  <div className="action-link">Start Audit <span className="arrow">→</span></div>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        <section ref={storageRef}>
-          <h2>Storage Selection</h2>
-          <StorageSlider uid={user.uid} user={user} />
+        {/* Pricing / Storage Slider Section */}
+        <section ref={storageRef} className="pricing-section">
+          <div className="section-header center">
+            <h2 className="section-title">Configure Your Storage</h2>
+            <p className="section-subtitle">Use the slider below to select your required capacity.</p>
+          </div>
+          
+          <div className="slider-wrapper glass-panel">
+            <StorageSlider uid={user.uid} user={user} />
+          </div>
         </section>
       </main>
     </div>

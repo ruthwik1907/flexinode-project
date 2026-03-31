@@ -78,16 +78,25 @@ const Payment = mongoose.models.Payment || mongoose.model("Payment", paymentSche
    ROUTES
 ============================ */
 
+// Admin Authentication Middleware
+const verifyAdmin = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || authHeader !== `Bearer ${process.env.ADMIN_PASSWORD}`) {
+    return res.status(403).json({ error: "Unauthorized access. Invalid or missing token." });
+  }
+  next();
+};
+
 // Admin Login
 app.post("/api/admin-login", (req, res) => {
-  const { password } = req.body; // Now this will be defined!
+  const { password } = req.body;
 
   if (!process.env.ADMIN_PASSWORD) {
     return res.status(500).json({ error: "ADMIN_PASSWORD is not configured" });
   }
 
   if (password === process.env.ADMIN_PASSWORD) {
-    return res.json({ success: true });
+    return res.json({ success: true, token: process.env.ADMIN_PASSWORD });
   }
 
   return res.status(401).json({ error: "Invalid password" });
@@ -111,7 +120,7 @@ app.post("/api/users", async (req, res) => {
   }
 });
 
-app.get("/api/users", async (req, res) => {
+app.get("/api/users", verifyAdmin, async (req, res) => {
   try {
     const users = await User.find().sort({ _id: -1 });
     return res.json(users);
@@ -146,7 +155,7 @@ app.post("/api/payments", async (req, res) => {
 });
 
 // Update payment status
-app.put("/api/payments/:id", async (req, res) => {
+app.put("/api/payments/:id", verifyAdmin, async (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
 
@@ -169,6 +178,50 @@ app.put("/api/payments/:id", async (req, res) => {
   } catch (err) {
     console.error("Update payment error:", err);
     return res.status(500).json({ error: err.message || "Failed to update payment" });
+  }
+});
+
+// Get all payments for admin
+app.get("/api/payments", verifyAdmin, async (req, res) => {
+  try {
+    const payments = await Payment.find().sort({ createdAt: -1 });
+    return res.json(payments);
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+});
+
+// Get admin stats
+app.get("/api/stats", verifyAdmin, async (req, res) => {
+  try {
+    const totalUsers = await User.countDocuments();
+    
+    // Calculate total storage distributed
+    const users = await User.find({}, "storageGB");
+    const totalStorageGB = users.reduce((acc, curr) => acc + (curr.storageGB || 0), 0);
+
+    // Calculate metrics strictly from Payment records
+    const payments = await Payment.find();
+    let totalRevenue = 0;
+    let pendingPayments = 0;
+
+    payments.forEach(payment => {
+      if (payment.status === "SUCCESS") {
+        totalRevenue += payment.totalPrice;
+      } else if (payment.status === "PENDING") {
+        pendingPayments++;
+      }
+    });
+
+    res.json({
+      totalUsers,
+      totalStorageGB,
+      totalRevenue,
+      pendingPayments
+    });
+  } catch (err) {
+    console.error("Stats Error:", err);
+    res.status(500).json({ error: "Failed to load stats" });
   }
 });
 

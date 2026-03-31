@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { auth, googleProvider } from "./firebase";
 import { useNavigate } from "react-router-dom";
 import { API_BASE } from "./services";
+import logo from "./assets/fnlogo.jpg";
 import "./GoogleAuth.css";
-
 
 const GoogleAuth = () => {
   const [user, setUser] = useState(null);
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,20 +37,22 @@ const GoogleAuth = () => {
         }),
       })
         .then((res) => res.json())
-        .then((data) => console.log("User saved in DB:", data))
-        .catch((err) => console.error(err));
+        .then((data) => console.log("User synced with DB"))
+        .catch((err) => console.error("Sync error:", err));
     }
   }, [user]);
 
   const signInWithGoogle = async () => {
     try {
       setError("");
+      setIsLoading(true);
       googleProvider.setCustomParameters({ prompt: "select_account" });
       await auth.signInWithPopup(googleProvider);
-      navigate("/"); // Navigate to home only after login
+      navigate("/");
     } catch (err) {
       console.error(err);
-      setError(err.message || "Google sign-in failed. Please try again.");
+      setError(err.message || "Authentication failed. Please try again.");
+      setIsLoading(false);
     }
   };
 
@@ -63,39 +66,63 @@ const GoogleAuth = () => {
   };
 
   return (
-   <div className="auth-container">
-  <div className="auth-card">
-    {user ? (
-      <>
-        <div className="auth-avatar">
-          {user.displayName?.slice(0, 2).toUpperCase()}
-        </div>
-        <h2 className="auth-title">Welcome, {user.displayName}</h2>
-        <p className="auth-subtitle">{user.email}</p>
-        <button className="sign-out-btn" onClick={signOut}>
-          Sign out
-        </button>
-      </>
-    ) : (
-      <>
-        <h2 className="auth-title">Sign in</h2>
-        <p className="auth-subtitle">
-          with your Google Account to continue.
-        </p>
-        {error && <p className="auth-error">{error}</p>}
-        <button className="google-btn" onClick={signInWithGoogle}>
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Logo_2013_Google.png"
-            alt="Google"
-            className="google-icon"
-          />
-          Sign in with Google
-        </button>
-      </>
-    )}
-  </div>
-</div>
+    <div className="auth-portal animate-fade-in">
+      <div className="auth-background">
+        <div className="glow glow-1"></div>
+        <div className="glow glow-2"></div>
+      </div>
 
+      <div className="auth-card glass-panel">
+        <div className="brand-header">
+          <img src={logo} alt="Flexinode Logo" className="auth-logo" />
+          <h1>FLEXINODE</h1>
+        </div>
+
+        {user ? (
+          <div className="auth-profile">
+            <div className="auth-avatar lg">
+              {user.displayName?.slice(0, 2).toUpperCase() || "?"}
+            </div>
+            <h2>Welcome Back!</h2>
+            <p className="user-email">{user.email}</p>
+            <div className="auth-actions">
+              <button className="btn-primary w-full" onClick={() => navigate("/")}>
+                Go to Dashboard
+              </button>
+              <button className="btn-secondary w-full" onClick={signOut}>
+                Sign out
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="auth-login-flow">
+            <h2>Sign In to Portal</h2>
+            <p className="auth-subtitle">
+              Secure access to your enterprise data management solutions.
+            </p>
+            
+            {error && <div className="toast toast-error">{error}</div>}
+            
+            <button 
+              className={`google-sso-btn ${isLoading ? 'loading' : ''}`} 
+              onClick={signInWithGoogle}
+              disabled={isLoading}
+            >
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Logo_2013_Google.png"
+                alt="Google"
+                className="google-icon"
+              />
+              <span>{isLoading ? 'Authenticating...' : 'Continue with Google'}</span>
+            </button>
+
+            <div className="auth-footer">
+              <p>By signing in, you agree to our Terms of Service & Privacy Policy.</p>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 

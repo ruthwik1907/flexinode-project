@@ -6,47 +6,45 @@ const ContactPage = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="contact-container">
-      <div className="contact-header">
-        <h1>Contact Us</h1>
-        <p>
-          We value our customers and partners worldwide. Whether you have a
-          question, need assistance — we’re here for you!
+    <div className="contact-page animate-fade-in">
+      <div className="contact-hero">
+        <h1 className="contact-title">Get in Touch</h1>
+        <p className="contact-subtitle">
+          We value our customers and partners worldwide. Whether you have a question, need assistance — we're here for you 24/7.
         </p>
       </div>
 
-      <div className="contact-card">
-        <h2>FLEXINODE</h2>
-        <p className="address">
-          Sai Rushidhar Konireddy, Mullapudi Road, Nallamanikalava, Thanapalle,
-          Tirupati, Andhra Pradesh, India
-        </p>
+      <div className="contact-cards-container">
+        <div className="contact-detail-card glass-panel group">
+           <div className="icon-wrapper">📍</div>
+           <h3>Headquarters</h3>
+           <p className="contact-info">
+              Sai Rushidhar Konireddy, Mullapudi Road, Nallamanikalava, Thanapalle, Tirupati, Andhra Pradesh, India
+           </p>
+        </div>
 
-        <p className="phone">
-          📞 <a href="tel:8886347428">+91 8886347428</a>
-        </p>
+        <div className="contact-detail-card glass-panel group">
+           <div className="icon-wrapper">📞</div>
+           <h3>Phone Support</h3>
+           <p className="contact-info">
+             <a href="tel:8886347428" className="contact-link">+91 8886347428</a>
+           </p>
+           <p className="hint">Available 24/7 Mon-Sun</p>
+        </div>
 
-        <p className="email">
-          📧{" "}
-          <a
-            href="https://mail.google.com/mail/?view=cm&fs=1&to=flexinode@gmail.com"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            flexinode@gmail.com
-          </a>
-        </p>
-
-        <h2>Availability</h2>
-        <p>
-          We’re available 24/7 serving customers{" "}
-          <strong>internationally</strong>.
-        </p>
+        <div className="contact-detail-card glass-panel group">
+           <div className="icon-wrapper">✉️</div>
+           <h3>Email Us</h3>
+           <p className="contact-info">
+             <a href="mailto:flexinode@gmail.com" className="contact-link">flexinode@gmail.com</a>
+           </p>
+           <p className="hint">Average response time: 2 hours</p>
+        </div>
       </div>
 
-      <div className="back-btn-container">
-        <button className="back-btn" onClick={() => navigate("/")}>
-          ← Back to Home
+      <div className="contact-footer">
+        <button className="btn-secondary back-btn" onClick={() => navigate("/")}>
+          ← Return to Dashboard
         </button>
       </div>
     </div>

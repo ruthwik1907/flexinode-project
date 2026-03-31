@@ -9,7 +9,8 @@ const StorageSlider = ({ uid, user }) => {
   const [showQRCode, setShowQRCode] = useState(false);
   const [paymentId, setPaymentId] = useState("");
   const [paymentStatus, setPaymentStatus] = useState("");
-  const [isMarkingPaid, setIsMarkingPaid] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
   const pricePerGB = 1000;
   const gbPerStep = 1;
@@ -27,18 +28,23 @@ const StorageSlider = ({ uid, user }) => {
 
   const handleChange = (e) => {
     setValue(Number(e.target.value));
-    setShowQRCode(false); // Hide QR code when slider changes
+    setShowQRCode(false);
     setPaymentId("");
     setPaymentStatus("");
+    setErrorMsg("");
   };
 
   const handlePay = async () => {
-    if (!user) return alert("Login required!");
+    if (!user) {
+      setErrorMsg("Please sign in to continue with your purchase.");
+      return;
+    }
+    setErrorMsg("");
+    setIsLoading(true);
 
     try {
       const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-      // 1️⃣ Call backend to save payment
       const response = await fetch(`${API_BASE}/payments`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -55,154 +61,116 @@ const StorageSlider = ({ uid, user }) => {
       });
 
       const data = await response.json();
-      console.log("Payment processed:", data);
+      
+      if (!response.ok) {
+        throw new Error(data.error || "Payment creation failed");
+      }
+
       setPaymentId(data?.payment?._id || "");
       setPaymentStatus(data?.payment?.status || "PENDING");
 
       if (isMobile) {
         window.location.href = upiUrl;
       } else {
-        setShowQRCode(true); // show QR code for desktop
+        setShowQRCode(true);
       }
     } catch (err) {
       console.error(err);
-      alert("Payment failed. Try again.");
-    }
-  };
-
-  const handleDebugDone = async () => {
-    if (!paymentId) {
-      alert("No payment record found to mark as paid.");
-      return;
-    }
-
-    try {
-      setIsMarkingPaid(true);
-
-      const response = await fetch(`${API_BASE}/payments/${paymentId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: "PAID" }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data?.error || "Unable to mark payment as paid.");
-      }
-
-      setPaymentStatus(data?.status || "PAID");
-      alert("Payment marked as PAID for debugging.");
-    } catch (err) {
-      console.error(err);
-      alert(err.message || "Failed to update payment status.");
+      setErrorMsg(err.message || "Payment failed. Please try again.");
     } finally {
-      setIsMarkingPaid(false);
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="payment-dialog-container">
-      <div className="slider-section">
-        <h2 className="section-title">Choose Storage</h2>
-        <div className="slider-content">
+    <div className="payment-dialog-container animate-fade-in">
+      {/* Configure Section */}
+      <div className="configure-section">
+        <h3>1. Select Capacity</h3>
+        
+        <div className="slider-control-group">
+          <div className="slider-header">
+            <span className="slider-label">Storage Amount</span>
+            <span className="slider-value badge">{value} GB</span>
+          </div>
+          
           <input
             type="range"
             min="1"
             max="100"
             value={value}
             onChange={handleChange}
-            className="styled-slider"
+            className="modern-range"
+            style={{ '--progress': `${((value - 1) / 99) * 100}%` }}
           />
-          <div className="details-row">
-            <p>
-              Selected: <strong>{value} GB</strong>
-            </p>
-            <p>
-              Price: <strong>₹{totalPrice}</strong>
-            </p>
+          <div className="slider-marks">
+            <span>1GB</span>
+            <span>100GB</span>
           </div>
         </div>
-        <div className="upi-input-container">
-          <p className="label">Your UPI Mobile Number</p>
+
+        <div className="upi-input-group mt-6">
+          <label htmlFor="upi-phone">2. Enter your UPI Mobile Number</label>
           <input
+            id="upi-phone"
             type="tel"
-            placeholder="e.g., 9876543210"
+            placeholder="e.g. 9876543210"
             value={upiNumber}
             onChange={(e) => setUpiNumber(e.target.value)}
-            className="upi-input"
+            className="modern-input"
             maxLength="10"
           />
+          {!isUpiNumberValid && upiNumber.length > 0 && (
+            <span className="input-hint text-warning">Must be a valid 10-digit number</span>
+          )}
         </div>
       </div>
 
-      <div className="payment-section">
-        <h2 className="section-title">Complete Payment</h2>
-        <div className="qr-code-container">
+      {/* Summary & Checkout Section */}
+      <div className="checkout-section">
+        <h3>Order Summary</h3>
+        
+        <div className="summary-card">
+          <div className="summary-row">
+            <span>Enterprise Storage</span>
+            <span>{value} GB</span>
+          </div>
+          <div className="summary-row">
+            <span>Price per GB</span>
+            <span>₹{pricePerGB}</span>
+          </div>
+          <div className="summary-divider"></div>
+          <div className="summary-row total">
+            <span>Total Payable</span>
+            <span className="total-price text-brand">₹{totalPrice.toLocaleString()}</span>
+          </div>
+        </div>
+
+        {errorMsg && <div className="toast toast-error mt-4">{errorMsg}</div>}
+
+        <div className="payment-actions mt-6">
           {showQRCode ? (
-            <>
-              <p>Scan with any UPI app (for Desktop/Laptop)</p>
-              <div className="qr-code-box">
-                <QRCodeSVG value={upiUrl} size={150} />
+            <div className="qr-checkout animate-fade-in">
+              <p className="qr-instruction">Scan with any UPI App to Pay</p>
+              <div className="qr-box">
+                <QRCodeSVG value={upiUrl} size={160} fgColor="var(--bg-primary)" />
               </div>
-              <div className="upi-info">
-                <p>
-                  <strong>Total: ₹{totalPrice}</strong>
-                </p>
-                <p>
-                  Pay to: <strong>{payeeName}</strong>
-                </p>
-                {paymentStatus && (
-                  <p className="payment-status">
-                    Status: <strong>{paymentStatus}</strong>
-                  </p>
-                )}
+              <p className="payee-info">Paying: <strong>{payeeName}</strong></p>
+              
+              <div className="status-tracker">
+                <div className="status-indicator pending"></div>
+                <span>Awaiting Payment...</span>
               </div>
-              {paymentId && paymentStatus !== "PAID" && (
-                <button
-                  className="done-btn"
-                  onClick={handleDebugDone}
-                  disabled={isMarkingPaid}
-                >
-                  {isMarkingPaid ? "Marking..." : "Done"}
-                </button>
-              )}
-              {paymentStatus === "PAID" && (
-                <p className="debug-success">Payment marked as paid.</p>
-              )}
-            </>
-          ) : (
-            <div className="pay-button-container">
-              <p>
-                {/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
-                  ? "Tap below to open your UPI app"
-                  : "Generate QR code to pay with your UPI app"}
-              </p>
-              <button
-                className="pay-btn"
-                onClick={handlePay}
-                disabled={!isUpiNumberValid}
-              >
-                Pay ₹{totalPrice} via UPI
-              </button>
-              {paymentId && paymentStatus !== "PAID" && (
-                <button
-                  className="done-btn"
-                  onClick={handleDebugDone}
-                  disabled={isMarkingPaid}
-                >
-                  {isMarkingPaid ? "Marking..." : "Done"}
-                </button>
-              )}
-              {paymentStatus && (
-                <p className="payment-status">
-                  Status: <strong>{paymentStatus}</strong>
-                </p>
-              )}
-              {paymentStatus === "PAID" && (
-                <p className="debug-success">Payment marked as paid.</p>
-              )}
+              <p className="status-subtext">Order #{paymentId.slice(-6).toUpperCase()}</p>
             </div>
+          ) : (
+            <button
+              className={`btn-primary w-full checkout-btn ${isLoading ? 'loading' : ''}`}
+              onClick={handlePay}
+              disabled={!isUpiNumberValid || isLoading}
+            >
+              {isLoading ? 'Processing...' : `Proceed to Pay ₹${totalPrice.toLocaleString()}`}
+            </button>
           )}
         </div>
       </div>
@@ -211,4 +179,3 @@ const StorageSlider = ({ uid, user }) => {
 };
 
 export default StorageSlider;
-//all my changes the pushed to git main

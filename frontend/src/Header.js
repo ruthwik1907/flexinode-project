@@ -11,9 +11,17 @@ const Header = ({ user }) => {
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isScrolled, setIsScrolled] = useState(false);
   const navigate = useNavigate();
 
-  // Close nav menu if window is resized above mobile breakpoint (768px)
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth > 768 && isNavOpen) {
@@ -51,7 +59,6 @@ const Header = ({ user }) => {
     }
 
     try {
-      // Corrected to use the standard buildApiUrl helper
       const res = await fetch(buildApiUrl("/admin-login"), {
         method: "POST",
         headers: { 
@@ -65,6 +72,7 @@ const Header = ({ user }) => {
 
       if (res.ok) {
         localStorage.setItem("flexinode_admin_access", "granted");
+        localStorage.setItem("flexinode_admin_password", data.token || password);
         setShowPasswordModal(false);
         setPassword("");
         setError("");
@@ -74,104 +82,75 @@ const Header = ({ user }) => {
       }
     } catch (err) {
       console.error(err);
-      setError(
-        "⚠️ Unable to reach the server. Please check your connection or Vercel deployment status."
-      );
+      setError("⚠️ Unable to reach the server. Please check your connection.");
     }
   };
 
   const getInitials = () => {
-    const name = user.displayName || user.email;
-    if (!name) return "?";
-    
+    const name = user?.displayName || user?.email || "?";
     const names = name.split(" ");
     if (names.length > 1) {
-      return (names[0]?.[0] || "").toUpperCase() + (names[names.length - 1]?.[0] || "").toUpperCase();
+      return (names[0][0] + names[names.length - 1][0]).toUpperCase();
     }
-    return (name[0] || "").toUpperCase();
+    return name[0].toUpperCase();
   };
 
   return (
     <>
-      <header className="home-header">
-        <div className="logo-container">
-          <Link to="/">
-            <img src={logo} alt="App Logo" className="logo" />
+      <header className={`main-header ${isScrolled ? "scrolled glass-panel" : ""}`}>
+        <div className="header-content">
+          <Link to="/" className="brand-link">
+            <img src={logo} alt="Flexinode Logo" className="brand-logo" />
+            <span className="brand-name">FLEXINODE</span>
           </Link>
-        </div>
 
-        <div className="right-section">
-          <nav className={`nav-links ${isNavOpen ? 'open' : ''}`}>
-            <Link to="/" className="nav-btn" onClick={() => setIsNavOpen(false)}>
-              Home
-            </Link>
-            <button onClick={handleAdminTap} className="nav-btn">
-              Admin
-            </button>
-            <Link to="/contact" className="nav-btn" onClick={() => setIsNavOpen(false)}>
-              Contact Us
-            </Link>
-          </nav>
-
-          <button className="menu-icon" onClick={toggleNav} aria-label="Toggle navigation menu">
-            <svg className="hamburger-svg" viewBox="0 0 100 80" width="40" height="40" fill="currentColor">
-              <rect width="100" height="15" rx="8"></rect>
-              <rect y="30" width="100" height="15" rx="8"></rect>
-              <rect y="60" width="100" height="15" rx="8"></rect>
-            </svg>
+          <button className="mobile-menu-btn" onClick={toggleNav}>
+            <div className={`hamburger ${isNavOpen ? "open" : ""}`}>
+              <span></span><span></span><span></span>
+            </div>
           </button>
-          
-          <div className="user-info">
-            <span className="user-name">{user.displayName || user.email}</span>
-            <div className="avatar-container">
-              <div className="generic-avatar" onClick={toggleDropdown}>
-                {getInitials()}
-              </div>
 
+          <nav className={`main-nav ${isNavOpen ? "open glass-panel" : ""}`}>
+            <Link to="/" className="nav-link" onClick={() => setIsNavOpen(false)}>Home</Link>
+            <button onClick={handleAdminTap} className="nav-link nav-link-btn">Admin Portal</button>
+            <Link to="/contact" className="nav-link" onClick={() => setIsNavOpen(false)}>Contact</Link>
+            
+            <div className="user-profile-widget" onClick={toggleDropdown}>
+              <div className="avatar">{getInitials()}</div>
               {dropdownOpen && (
-                <div className="dropdown-menu">
-                  <div className="dropdown-row">
-                    <span className="dropdown-item" onClick={signOut}>
-                      Sign out
-                    </span>
-                    <span className="close-btn" onClick={closeDropdown}>
-                      &times;
-                    </span>
+                <div className="profile-dropdown glass-panel animate-fade-in">
+                  <div className="profile-info">
+                    <p className="profile-name">{user?.displayName || "User"}</p>
+                    <p className="profile-email">{user?.email}</p>
                   </div>
+                  <button className="logout-action" onClick={signOut}>Sign Out</button>
                 </div>
               )}
             </div>
-          </div>
+          </nav>
         </div>
       </header>
 
       {showPasswordModal && (
         <div className="modal-overlay">
-          <div className="modal-box">
-            <h2>🔒 Admin Access</h2>
-            <p>Please enter the admin password to continue:</p>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter password"
-              className="password-input"
-              onKeyDown={(e) => e.key === "Enter" && handlePasswordSubmit()}
-            />
-            {error && <p className="error-text">{error}</p>}
+          <div className="modal-content glass-panel animate-fade-in">
+            <h2>Admin Authentication</h2>
+            <p>Please enter your credentials to access the portal.</p>
+            <div className="input-group">
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter admin password"
+                className="modern-input"
+                onKeyDown={(e) => e.key === "Enter" && handlePasswordSubmit()}
+                autoFocus
+              />
+            </div>
+            {error && <div className="error-message">{error}</div>}
             <div className="modal-actions">
-              <button
-                className="modal-btn confirm"
-                onClick={handlePasswordSubmit}
-              >
-                Submit
-              </button>
-              <button
-                className="modal-btn cancel"
-                onClick={() => setShowPasswordModal(false)}
-              >
-                Cancel
-              </button>
+              <button className="btn-secondary" onClick={() => setShowPasswordModal(false)}>Cancel</button>
+              <button className="btn-primary" onClick={handlePasswordSubmit}>Authenticate</button>
             </div>
           </div>
         </div>

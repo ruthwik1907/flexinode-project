@@ -4,6 +4,7 @@ import {
   Routes,
   Route,
   Navigate,
+  useLocation,
 } from "react-router-dom";
 import { auth } from "./firebase";
 import GoogleAuth from "./GoogleAuth";
@@ -28,6 +29,37 @@ const AdminRoute = ({ user, children }) => {
   return children;
 };
 
+const AppContent = ({ user }) => {
+  const location = useLocation();
+  const hideHeader = location.pathname.startsWith("/admin") || location.pathname === "/auth";
+
+  return (
+    <div className="app-wrapper">
+      {!hideHeader && user && <Header user={user} />}
+      
+      <main className={`app-main ${hideHeader ? 'no-header' : 'with-header'}`}>
+        <Routes>
+          <Route path="/auth" element={user ? <Navigate to="/" replace /> : <GoogleAuth />} />
+          <Route
+            path="/"
+            element={user ? <Home user={user} /> : <Navigate to="/auth" replace />}
+          />
+          <Route
+            path="/admin"
+            element={
+              <AdminRoute user={user}>
+                <AdminPage user={user} />
+              </AdminRoute>
+            }
+          />
+          <Route path="/contact" element={user ? <ContactPage /> : <Navigate to="/auth" replace />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </main>
+    </div>
+  );
+};
+
 const App = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -46,27 +78,16 @@ const App = () => {
   }, []);
 
   if (loading)
-    return <p style={{ textAlign: "center", marginTop: "50px" }}>Loading...</p>;
+    return (
+      <div className="global-loader">
+        <div className="spinner"></div>
+        <p>Initializing FLEXINODE...</p>
+      </div>
+    );
 
   return (
     <Router>
-      {user && <Header user={user} />}
-      <Routes>
-        <Route path="/auth" element={<GoogleAuth />} />
-        <Route
-          path="/"
-          element={user ? <Home user={user} /> : <Navigate to="/auth" replace />}
-        />
-        <Route
-          path="/admin"
-          element={
-            <AdminRoute user={user}>
-              <AdminPage user={user} />
-            </AdminRoute>
-          }
-        />
-        <Route path="/contact" element={<ContactPage />} />
-      </Routes>
+      <AppContent user={user} />
     </Router>
   );
 };
