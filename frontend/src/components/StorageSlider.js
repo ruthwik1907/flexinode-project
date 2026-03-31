@@ -82,6 +82,23 @@ const StorageSlider = ({ uid, user }) => {
     }
   };
 
+  const checkPaymentStatus = async () => {
+    if (!paymentId) return;
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${API_BASE}/payments/${paymentId}`); // Note: need to ensure this endpoint is public or use a specific public check
+      const data = await response.json();
+      if (response.ok) {
+        setPaymentStatus(data.status);
+      }
+    } catch (err) {
+      console.error("Status check failed:", err);
+    } finally {
+      setIsLoading(true); // Small delay feel
+      setTimeout(() => setIsLoading(false), 500);
+    }
+  };
+
   return (
     <div className="payment-dialog-container animate-fade-in">
       {/* Configure Section */}
@@ -157,11 +174,28 @@ const StorageSlider = ({ uid, user }) => {
               </div>
               <p className="payee-info">Paying: <strong>{payeeName}</strong></p>
               
-              <div className="status-tracker">
-                <div className="status-indicator pending"></div>
-                <span>Awaiting Payment...</span>
+              <div className="status-tracker mt-4">
+                <div className={`status-indicator ${paymentStatus.toLowerCase()}`}></div>
+                <span>Status: {paymentStatus}</span>
               </div>
-              <p className="status-subtext">Order #{paymentId.slice(-6).toUpperCase()}</p>
+              
+              {paymentStatus !== 'SUCCESS' && (
+                <button 
+                  className={`btn-secondary mt-4 w-full ${isLoading ? 'loading' : ''}`}
+                  onClick={checkPaymentStatus}
+                  disabled={isLoading}
+                >
+                  {isLoading ? 'Checking...' : 'Refresh Status'}
+                </button>
+              )}
+
+              {paymentStatus === 'SUCCESS' && (
+                <div className="toast toast-success mt-4">
+                  Account Activated! Your storage has been updated.
+                </div>
+              )}
+              
+              <p className="status-subtext mt-4">Order #{paymentId.slice(-6).toUpperCase()}</p>
             </div>
           ) : (
             <button

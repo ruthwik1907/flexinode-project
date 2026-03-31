@@ -164,20 +164,47 @@ app.put("/api/payments/:id", verifyAdmin, async (req, res) => {
   }
 
   try {
-    const payment = await Payment.findByIdAndUpdate(
+    const oldPayment = await Payment.findById(id);
+    if (!oldPayment) {
+      return res.status(404).json({ error: "Payment not found" });
+    }
+
+    const updatedPayment = await Payment.findByIdAndUpdate(
       id,
       { status },
       { new: true, runValidators: true }
     );
 
-    if (!payment) {
-      return res.status(404).json({ error: "Payment not found" });
+    // Automation: If status changes to SUCCESS, add GB to user
+    if (status === "SUCCESS" && oldPayment.status !== "SUCCESS") {
+      await User.findOneAndUpdate(
+        { uid: updatedPayment.userId },
+        { $inc: { storageGB: updatedPayment.gb } }
+      );
+    } 
+    // Automation: If status changes FROM SUCCESS to something else (e.g. reversal), remove GB
+    else if (oldPayment.status === "SUCCESS" && status !== "SUCCESS") {
+      await User.findOneAndUpdate(
+        { uid: updatedPayment.userId },
+        { $inc: { storageGB: -updatedPayment.gb } }
+      );
     }
 
-    return res.json(payment);
+    return res.json(updatedPayment);
   } catch (err) {
     console.error("Update payment error:", err);
     return res.status(500).json({ error: err.message || "Failed to update payment" });
+  }
+});
+
+// GET single payment status (Public for user tracking)
+app.get("/api/payments/:id", async (req, res) => {
+  try {
+    const payment = await Payment.findById(req.params.id);
+    if (!payment) return res.status(404).json({ error: "Payment not found" });
+    res.json(payment);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch status" });
   }
 });
 
