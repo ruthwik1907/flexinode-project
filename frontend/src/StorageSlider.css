@@ -162,8 +162,8 @@ body {
 }
 
 /* 🔹 Pay Button */
-.pay-btn {
-  background-color: #007bff;
+.pay-btn,
+.done-btn {
   color: white;
   padding: 12px 25px;
   border: none;
@@ -177,12 +177,26 @@ body {
   margin-top: 15px;
 }
 
+.pay-btn {
+  background-color: #007bff;
+}
+
 .pay-btn:hover {
   background-color: #0056b3;
   transform: scale(1.02);
 }
 
-.pay-btn:disabled {
+.done-btn {
+  background-color: #28a745;
+}
+
+.done-btn:hover {
+  background-color: #1f8a38;
+  transform: scale(1.02);
+}
+
+.pay-btn:disabled,
+.done-btn:disabled {
   background-color: #b0c4de;
   cursor: not-allowed;
 }
@@ -199,6 +213,17 @@ body {
   font-size: 0.95rem;
   color: #666;
   margin-bottom: 10px;
+}
+
+.payment-status {
+  margin-top: 12px;
+  color: #333 !important;
+}
+
+.debug-success {
+  margin-top: 12px !important;
+  color: #1f8a38 !important;
+  font-weight: 600;
 }
 
 /* 🔹 Mobile & Tablet Responsive Styling */
@@ -232,7 +257,8 @@ body {
     width: 100%;
   }
 
-  .pay-btn {
+  .pay-btn,
+  .done-btn {
     width: 100%;
     max-width: 260px;
     padding: 12px 20px;
@@ -258,7 +284,8 @@ body {
     padding: 15px;
   }
 
-  .pay-btn {
+  .pay-btn,
+  .done-btn {
     padding: 10px 18px;
     font-size: 0.95rem;
   }
